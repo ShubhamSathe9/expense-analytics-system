@@ -1,0 +1,25 @@
+{% extends "expenses/base.html" %}
+{% block title %}{{ form_title }} Category{% endblock %}
+{% block content %}
+
+<h1 class="text-white text-2xl font-semibold mb-6">{{ form_title }} Category</h1>
+
+<div class="max-w-md mx-auto backdrop-blur-lg bg-white/3 border border-white/6 rounded-2xl p-6 shadow">
+  <form method="post">
+    {% csrf_token %}
+    <div>
+      <label class="text-gray-300 text-sm">Name</label>
+      <input name="name" value="{{ category.name|default_if_none:'' }}" class="w-full mt-1 p-3 rounded-lg bg-black/50 border border-white/6 text-white" required/>
+    </div>
+    <div class="mt-4">
+      <label class="text-gray-300 text-sm">Icon (emoji / class)</label>
+      <input name="icon" value="{{ category.icon|default_if_none:'' }}" class="w-full mt-1 p-3 rounded-lg bg-black/50 border border-white/6 text-white"/>
+    </div>
+
+    <div class="mt-6 text-right">
+      <button class="px-6 py-3 bg-indigo-600 rounded-xl text-white font-semibold">{{ button_text }}</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>Register • ExpensePro</title>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+
+<style>
+/* Same premium neon + glass theme */
+body{font-family:Inter, sans-serif;background:#0b0b0f;overflow:hidden;color:#f3f3f7;margin:0;}
+#particle-canvas{position:fixed;inset:0;pointer-events:none;z-index:0;}
+.gradient-waves{position:fixed;inset:-20%;background:
+radial-gradient(40% 40% at 10% 20%, rgba(106,0,255,0.10), transparent 60%),
+radial-gradient(30% 30% at 85% 80%, rgba(0,204,255,0.08), transparent 70%);
+filter:blur(60px);animation:wave 18s infinite ease;}
+@keyframes wave{0%{transform:translate(-5%,-3%) scale(1)}50%{transform:translate(5%,4%) scale(1.1)}100%{transform:translate(-5%,-3%) scale(1)}}
+
+.page-wrap{display:flex;justify-content:center;align-items:center;height:100vh;padding:30px;position:relative;z-index:10;}
+
+.auth-card{
+  width:380px;padding:30px;border-radius:16px;
+  background:rgba(26,22,36,0.55);backdrop-filter:blur(12px);
+  border:1px solid rgba(255,255,255,0.06);
+  box-shadow:0 10px 40px rgba(0,0,0,0.6),0 0 40px rgba(106,0,255,0.1);
+  animation:fadeUp 1s ease;
+}
+@keyframes fadeUp{from{opacity:0;transform:translateY(20px)}to{opacity:1;transform:none}}
+
+h2{margin:0 0 6px;font-size:24px;}
+.card-sub{color:#b6b7c1;margin-bottom:25px;font-size:14px;}
+
+.input-wrap{
+  background:rgba(255,255,255,0.03);
+  border:1px solid rgba(255,255,255,0.08);
+  padding:12px;border-radius:10px;margin-bottom:18px;
+  transition:.25s;
+}
+.input-wrap:focus-within{border-color:rgba(106,0,255,0.4);box-shadow:0 0 12px rgba(106,0,255,0.4);}
+.input-wrap input{
+  width:100%;background:transparent;border:0;outline:none;color:white;font-size:15px;
+}
+
+.btn-primary{
+  width:100%;padding:12px;margin-top:5px;border-radius:10px;border:0;
+  color:white;font-size:16px;font-weight:600;cursor:pointer;
+  background:linear-gradient(90deg,#6A00FF,#00CCFF);transition:.2s;
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 10px 35px rgba(106,0,255,0.4);}
+
+.switch{text-align:center;color:#b6b7c1;margin-top:20px;font-size:14px;}
+.switch a{color:#8f6bff;text-decoration:none;}
+</style>
+
+</head>
+<body>
+
+<canvas id="particle-canvas"></canvas>
+<div class="gradient-waves"></div>
+
+<div class="page-wrap">
+  <div class="auth-card">
+    <h2>Create Account</h2>
+    <p class="card-sub"></p>
+
+    <form action="/register/" method="POST">
+    {% csrf_token %}
+      <div class="input-wrap">
+        <input type="text" name="username" placeholder="Username" required>
+      </div>
+
+      <div class="input-wrap">
+        <input type="email" name="email" placeholder="Email" required>
+      </div>
+
+      <div class="input-wrap">
+        <input type="password" name="password1" placeholder="Password" required>
+      </div>
+
+      <div class="input-wrap">
+        <input type="password" name="password2" placeholder="Confirm Password" required>
+      </div>
+
+      <button class="btn-primary">Register</button>
+
+      <p class="switch">
+        Already have an account? <a href="/login/">Login</a>
+      </p>
+    </form>
+  </div>
+</div>
+
+<script>
+/* SAME PARTICLE ANIMATION */
+const c = document.getElementById("particle-canvas");
+const ctx = c.getContext("2d");
+let w = c.width = innerWidth;
+let h = c.height = innerHeight;
+
+const particles = [];
+const rand=(a,b)=>a+Math.random()*(b-a);
+for(let i=0;i<40;i++){
+  particles.push({x:rand(0,w),y:rand(0,h),r:rand(10,35),vx:rand(-0.2,0.2),vy:rand(-0.2,0.2),a:rand(0.05,0.2)});
+}
+function draw(){
+  ctx.clearRect(0,0,w,h);
+  particles.forEach(p=>{
+    p.x+=p.vx;p.y+=p.vy;
+    if(p.x<0||p.x>w)p.vx*=-1;
+    if(p.y<0||p.y>h)p.vy*=-1;
+    let g=ctx.createRadialGradient(p.x,p.y,0,p.x,p.y,p.r);
+    g.addColorStop(0,`rgba(106,0,255,${p.a})`);
+    g.addColorStop(1,"transparent");
+    ctx.fillStyle=g;
+    ctx.beginPath();ctx.arc(p.x,p.y,p.r,0,Math.PI*2);ctx.fill();
+  });
+  requestAnimationFrame(draw);
+}
+draw();
+</script>
+
+</body>
+</html>

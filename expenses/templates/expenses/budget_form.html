@@ -1,0 +1,38 @@
+{% extends "expenses/base.html" %}
+{% block title %}{{ form_title }} Budget{% endblock %}
+{% block content %}
+
+<h1 class="text-white text-2xl font-semibold mb-6">{{ form_title }} Budget</h1>
+
+<div class="max-w-xl mx-auto backdrop-blur-lg bg-white/3 border border-white/6 rounded-2xl p-6 shadow">
+  <form method="post">
+    {% csrf_token %}
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <label class="text-gray-300 text-sm">Category</label>
+        <select name="category" class="w-full mt-1 p-3 rounded-lg bg-black/50 border border-white/6 text-white">
+          {% for c in categories %}
+            <option value="{{ c.id }}" {% if budget and budget.category.id == c.id %}selected{% endif %}>{{ c.name }}</option>
+          {% endfor %}
+        </select>
+      </div>
+
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="text-gray-300 text-sm">Amount</label>
+          <input name="amount" type="number" step="0.01" value="{{ budget.amount|default_if_none:'' }}" class="w-full mt-1 p-3 rounded-lg bg-black/50 border border-white/6 text-white"/>
+        </div>
+        <div>
+          <label class="text-gray-300 text-sm">Month</label>
+          <input name="month" type="month" value="{{ budget.month|date:'Y-m' }}" class="w-full mt-1 p-3 rounded-lg bg-black/50 border border-white/6 text-white"/>
+        </div>
+      </div>
+
+      <div class="text-right">
+        <button class="px-6 py-3 bg-green-600 rounded-xl text-white font-semibold">{{ button_text }}</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

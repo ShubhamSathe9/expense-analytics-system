@@ -1,0 +1,272 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <title>Page Not Found – 404</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+    <!-- Google Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+
+    <style>
+        :root {
+            --bg: #050816;
+            --card: #0a0f1f;
+            --accent: #7b61ff;
+            --accent-soft: rgba(123, 97, 255, 0.2);
+            --text: #e4e4e7;
+            --muted: #9ca3af;
+            --danger: #f97373;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        html, body {
+            height: 100%;
+        }
+
+        body {
+            font-family: "Inter", system-ui;
+            background: radial-gradient(circle at top, #14163b 0, #050816 45%, #02010a 100%);
+            color: var(--text);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1.5rem;
+        }
+
+        .noise {
+            position: fixed;
+            inset: 0;
+            pointer-events: none;
+            opacity: 0.12;
+            background-image: url("https://grainy-gradients.vercel.app/noise.svg");
+            mix-blend-mode: soft-light;
+        }
+
+        .wrapper {
+            max-width: 900px;
+            width: 100%;
+        }
+
+        .card {
+            position: relative;
+            border-radius: 1.75rem;
+            padding: 2.25rem 2rem;
+            background: radial-gradient(circle at top left, rgba(123, 97, 255, 0.18), transparent 55%),
+                        radial-gradient(circle at bottom right, rgba(56, 189, 248, 0.16), transparent 55%),
+                        var(--card);
+            border: 1px solid rgba(148, 163, 184, 0.25);
+            box-shadow:
+                0 0 0 1px rgba(15, 23, 42, 0.5),
+                0 18px 60px rgba(15, 23, 42, 0.9);
+            display: grid;
+            grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr);
+            gap: 2rem;
+        }
+
+        @media (max-width: 768px) {
+            .card {
+                grid-template-columns: 1fr;
+                padding: 1.75rem 1.5rem;
+            }
+        }
+
+        .badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            padding: 0.25rem 0.75rem;
+            border-radius: 999px;
+            background: rgba(15, 23, 42, 0.85);
+            border: 1px solid rgba(148, 163, 184, 0.5);
+            font-size: 0.75rem;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: var(--muted);
+            margin-bottom: 1.25rem;
+        }
+
+        .badge-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 999px;
+            background: var(--danger);
+            box-shadow: 0 0 12px rgba(248, 113, 113, 0.9);
+        }
+
+        .title-row {
+            display: flex;
+            align-items: baseline;
+            gap: 0.75rem;
+            flex-wrap: wrap;
+        }
+
+        .code {
+            font-size: 3.25rem;
+            font-weight: 700;
+            line-height: 1;
+            letter-spacing: 0.04em;
+            background: linear-gradient(120deg, #f97373, #f97316, #facc15);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .headline {
+            font-size: 1.6rem;
+            font-weight: 600;
+        }
+
+        .subtitle {
+            margin-top: 0.9rem;
+            font-size: 0.98rem;
+            line-height: 1.6;
+            color: var(--muted);
+        }
+
+        .subtitle strong {
+            color: var(--text);
+            font-weight: 500;
+        }
+
+        .buttons {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.75rem;
+            margin-top: 1.8rem;
+        }
+
+        .btn {
+            border-radius: 999px;
+            font-size: 0.9rem;
+            font-weight: 500;
+            padding: 0.7rem 1.4rem;
+            border: 1px solid transparent;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 0.45rem;
+            transition: transform 0.15s ease, box-shadow 0.15s ease;
+        }
+
+        .btn-primary {
+            background: radial-gradient(circle at top left, var(--accent), #4f46e5);
+            border-color: rgba(129, 140, 248, 0.9);
+            color: #f9fafb;
+            box-shadow: 0 0 25px rgba(123, 97, 255, 0.5);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-1px);
+        }
+
+        .btn-ghost {
+            border-color: rgba(148, 163, 184, 0.7);
+            background: rgba(15, 23, 42, 0.85);
+            color: var(--muted);
+        }
+
+        .btn-ghost:hover {
+            background: rgba(15, 23, 42, 0.95);
+            border-color: rgba(148, 163, 184, 0.9);
+            transform: translateY(-1px);
+        }
+
+        .right {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .orb {
+            width: 220px;
+            height: 220px;
+            border-radius: 999px;
+            background:
+                conic-gradient(from 210deg, rgba(248, 250, 252, 0.4), rgba(129, 140, 248, 0.9), rgba(56, 189, 248, 0.8));
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 0 40px rgba(129, 140, 248, 0.8);
+        }
+
+        .orb-inner {
+            width: 68%;
+            height: 68%;
+            border-radius: inherit;
+            background: radial-gradient(circle at top, rgba(15, 23, 42, 0.2), #020617 65%);
+            border: 1px solid rgba(148, 163, 184, 0.55);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 0.3rem;
+        }
+
+        .orb-label {
+            font-size: 0.65rem;
+            text-transform: uppercase;
+            letter-spacing: 0.18em;
+            color: var(--muted);
+        }
+
+        .orb-main {
+            font-size: 2.7rem;
+            font-weight: 700;
+            color: transparent;
+            background: linear-gradient(135deg, #f97373, #fb923c, #facc15);
+            -webkit-background-clip: text;
+        }
+
+        .orb-sub {
+            font-size: 0.8rem;
+            color: var(--muted);
+        }
+    </style>
+</head>
+<body>
+<div class="noise"></div>
+
+<div class="wrapper">
+    <main class="card">
+        <section>
+            <div class="badge">
+                <span class="badge-dot"></span>
+                <span>Route Not Found</span>
+            </div>
+
+            <div class="title-row">
+                <div class="code">404</div>
+                <div class="headline">Oops! This page doesn’t exist.</div>
+            </div>
+
+            <p class="subtitle">
+                The URL you opened is missing or was removed.  
+                If you tried accessing a protected route like <strong>/admin</strong>, it may be hidden for security.
+            </p>
+
+            <div class="buttons">
+                <a href="/" class="btn btn-primary">🏠 Back to Home</a>
+                <button class="btn btn-ghost" onclick="history.back()">↩️ Go Back</button>
+            </div>
+        </section>
+
+        <section class="right">
+            <div class="orb">
+                <div class="orb-inner">
+                    <div class="orb-label">Status</div>
+                    <div class="orb-main">404</div>
+                    <div class="orb-sub">Page Not Found</div>
+                </div>
+            </div>
+        </section>
+    </main>
+</div>
+
+</body>
+</html>

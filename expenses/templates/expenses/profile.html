@@ -1,0 +1,29 @@
+{% extends "expenses/base.html" %}
+{% block title %}Profile{% endblock %}
+{% block content %}
+
+<h1 class="text-white text-2xl font-semibold mb-6">Profile</h1>
+
+<div class="max-w-xl mx-auto backdrop-blur-lg bg-white/3 border border-white/6 rounded-2xl p-6 shadow-lg">
+  <form method="post">
+    {% csrf_token %}
+    <div class="mb-4">
+      <label class="text-gray-300 text-sm">Username</label>
+      <input class="w-full mt-1 p-3 rounded-lg bg-black/50 border border-white/6 text-white" value="{{ user.username }}" disabled/>
+    </div>
+    <div class="mb-4">
+      <label class="text-gray-300 text-sm">Email</label>
+      <input name="email" class="w-full mt-1 p-3 rounded-lg bg-black/50 border border-white/6 text-white" value="{{ user.email }}"/>
+    </div>
+    <div class="mb-4">
+      <label class="text-gray-300 text-sm">Currency</label>
+      <input name="currency" class="w-full mt-1 p-3 rounded-lg bg-black/50 border border-white/6 text-white" value="{{ profile.currency|default:'₹' }}" />
+    </div>
+
+    <div class="text-right">
+      <button class="px-6 py-3 bg-gradient-to-r from-indigo-500 to-purple-500 rounded-xl text-white font-semibold">Save</button>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

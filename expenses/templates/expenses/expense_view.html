@@ -1,0 +1,49 @@
+{% extends "expenses/base.html" %}
+{% block title %}Expense: {{ expense.title }}{% endblock %}
+{% block content %}
+
+<div class="max-w-2xl mx-auto">
+  <div class="flex items-center justify-between mb-6">
+    <h1 class="text-white text-2xl font-semibold">{{ expense.title }}</h1>
+    <div class="text-teal-300 font-semibold">₹{{ expense.amount }}</div>
+  </div>
+
+  <div class="backdrop-blur-lg bg-white/3 border border-white/6 rounded-2xl p-6 shadow-lg">
+    <div class="grid grid-cols-2 gap-4">
+      <div>
+        <div class="text-gray-400 text-xs">Category</div>
+        <div class="text-white mt-1">{{ expense.category.name if expense.category else "-" }}</div>
+      </div>
+      <div>
+        <div class="text-gray-400 text-xs">Date</div>
+        <div class="text-white mt-1">{{ expense.date }}</div>
+      </div>
+      <div>
+        <div class="text-gray-400 text-xs">Status</div>
+        <div class="mt-1">
+          {% if expense.status == "PAID" %}
+            <span class="px-3 py-1 rounded-full bg-teal-700/30 text-teal-200">Paid</span>
+          {% else %}
+            <span class="px-3 py-1 rounded-full bg-yellow-700/30 text-yellow-200">Pending</span>
+          {% endif %}
+        </div>
+      </div>
+      <div>
+        <div class="text-gray-400 text-xs">Created By</div>
+        <div class="text-white mt-1">{{ expense.user.username }}</div>
+      </div>
+    </div>
+
+    <div class="mt-6">
+      <div class="text-gray-400 text-xs">Note</div>
+      <div class="text-gray-200 mt-2 whitespace-pre-line">{{ expense.note|default:"—" }}</div>
+    </div>
+
+    <div class="mt-6 flex gap-3">
+      <a href="{% url 'expense_edit' expense.id %}" class="px-4 py-2 bg-indigo-600 rounded-lg text-white">Edit</a>
+      <a href="{% url 'expenses_list' %}" class="px-4 py-2 border border-white/6 rounded-lg text-gray-300">Back</a>
+    </div>
+  </div>
+</div>
+
+{% endblock %}

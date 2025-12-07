@@ -1,0 +1,29 @@
+{% extends "expenses/base.html" %}
+{% block title %}Notifications{% endblock %}
+{% block content %}
+
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-white text-2xl font-semibold">Notifications</h1>
+  <a href="{% url 'notifications_mark_all_read' %}" class="text-gray-300">Mark all read</a>
+</div>
+
+<div class="backdrop-blur-lg bg-white/3 border border-white/6 rounded-2xl p-5 shadow-lg">
+  <ul class="space-y-3">
+    {% for n in notifications %}
+    <li class="flex justify-between items-start p-3 rounded-lg hover:bg-white/6 transition">
+      <div>
+        <div class="text-white font-medium">{{ n.message }}</div>
+        <div class="text-gray-400 text-xs mt-1">{{ n.created_at }}</div>
+      </div>
+      <div class="flex items-center gap-2">
+        {% if not n.is_read %}<span class="text-yellow-300 text-sm">New</span>{% endif %}
+        <a href="{% url 'notification_toggle_read' n.id %}" class="text-teal-300">Toggle</a>
+      </div>
+    </li>
+    {% empty %}
+    <li class="text-center text-gray-500 py-6">No notifications</li>
+    {% endfor %}
+  </ul>
+</div>
+
+{% endblock %}

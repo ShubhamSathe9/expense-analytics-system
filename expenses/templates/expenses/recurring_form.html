@@ -1,0 +1,44 @@
+{% extends "expenses/base.html" %}
+{% block title %}{{ form_title }} Recurring{% endblock %}
+{% block content %}
+
+<h1 class="text-white text-2xl font-semibold mb-6">{{ form_title }} Recurring Expense</h1>
+
+<div class="max-w-2xl mx-auto backdrop-blur-2xl bg-white/3 border border-white/6 rounded-2xl p-6 shadow-xl">
+  <form method="post">
+    {% csrf_token %}
+    <div class="grid grid-cols-1 gap-4">
+      <div>
+        <label class="text-gray-300 text-sm">Title</label>
+        <input name="title" value="{{ r.title|default_if_none:'' }}" class="w-full p-3 mt-1 rounded-lg bg-black/50 border border-white/6 text-white"/>
+      </div>
+      <div class="grid grid-cols-2 gap-4">
+        <div>
+          <label class="text-gray-300 text-sm">Amount</label>
+          <input name="amount" type="number" step="0.01" value="{{ r.amount|default_if_none:'' }}" class="w-full p-3 mt-1 rounded-lg bg-black/50 border border-white/6 text-white"/>
+        </div>
+        <div>
+          <label class="text-gray-300 text-sm">Cycle</label>
+          <select name="cycle" class="w-full p-3 mt-1 rounded-lg bg-black/50 border border-white/6 text-white">
+            <option value="Monthly" {% if r.cycle == "Monthly" %}selected{% endif %}>Monthly</option>
+            <option value="Weekly" {% if r.cycle == "Weekly" %}selected{% endif %}>Weekly</option>
+            <option value="Yearly" {% if r.cycle == "Yearly" %}selected{% endif %}>Yearly</option>
+          </select>
+        </div>
+      </div>
+
+      <div>
+        <label class="text-gray-300 text-sm">Next Date</label>
+        <input type="date" name="next_date"
+       value="{{ r.next_date|default:today }}"
+       class="w-full p-3 mt-1 rounded-lg bg-black/50 border border-white/6 text-white"/>
+      </div>
+
+      <div class="text-right">
+        <button class="px-6 py-3 bg-gradient-to-r from-purple-500 to-pink-500 rounded-xl text-white font-semibold shadow-lg">{{ button_text }}</button>
+      </div>
+    </div>
+  </form>
+</div>
+
+{% endblock %}

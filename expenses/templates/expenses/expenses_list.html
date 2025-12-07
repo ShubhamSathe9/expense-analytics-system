@@ -1,0 +1,123 @@
+{% extends "expenses/base.html" %}
+{% block title %}All Expenses{% endblock %}
+{% block content %}
+
+<div class="flex items-center justify-between mb-6">
+  <h1 class="text-white text-2xl font-semibold">All Expenses</h1>
+  <div class="flex gap-3">
+    <a href="{% url 'expense_add' %}" class="px-4 py-2 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 text-white shadow-lg">+ Add Expense</a>
+    <a href="{% url 'export_csv' %}" class="px-4 py-2 rounded-xl bg-green-600 text-white shadow">Export CSV</a>
+  </div>
+</div>
+
+<!-- SEARCH + FILTERS -->
+<div class="backdrop-blur-lg bg-white/5 border border-white/10 rounded-2xl p-5 mb-6 shadow">
+  <form method="GET" class="grid grid-cols-1 md:grid-cols-4 gap-4">
+    
+    <!-- Search -->
+    <input 
+      type="text" 
+      name="search" 
+      placeholder="Search expenses..." 
+      value="{{ request.GET.search }}"
+      class="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white placeholder-gray-400"
+    />
+
+    <!-- Category Filter -->
+    <select 
+      name="category" 
+      class="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white"
+    >
+      <option value="">All Categories</option>
+      {% for c in categories %}
+        <option value="{{ c.id }}" {% if request.GET.category == c.id|stringformat:"s" %}selected{% endif %}>
+          {{ c.name }}
+        </option>
+      {% endfor %}
+    </select>
+
+    <!-- Status Filter -->
+    <select 
+      name="status" 
+      class="px-4 py-2 rounded-xl bg-white/10 border border-white/20 text-white"
+    >
+      <option value="">All Status</option>
+      <option value="PAID" {% if request.GET.status == "PAID" %}selected{% endif %}>Paid</option>
+      <option value="PENDING" {% if request.GET.status == "PENDING" %}selected{% endif %}>Pending</option>
+    </select>
+
+    <button class="px-4 py-2 rounded-xl bg-purple-600 text-white shadow">
+      Apply
+    </button>
+
+  </form>
+</div>
+
+
+<div class="backdrop-blur-lg bg-white/3 border border-white/5 rounded-2xl p-5 shadow-lg">
+  <div class="overflow-x-auto">
+    <table class="w-full text-left text-gray-300">
+      <thead class="text-xs text-gray-400 uppercase border-b border-white/6">
+        <tr>
+          <th class="py-3">Title</th>
+          <th>Category</th>
+          <th>Amount</th>
+          <th>Date</th>
+          <th>Status</th>
+          <th></th>
+        </tr>
+      </thead>
+      <tbody>
+        {% for e in expenses %}
+        <tr class="border-b border-white/6 hover:bg-white/6 transition">
+
+          <td class="py-3 font-medium text-white">{{ e.title }}</td>
+
+          <!-- CATEGORY BADGE -->
+          <td>
+            {% if e.category %}
+              <span class="px-3 py-1 text-xs rounded-full 
+                {% cycle 'bg-blue-700/30 text-blue-200' 
+                        'bg-green-700/30 text-green-200' 
+                        'bg-purple-700/30 text-purple-200' 
+                        'bg-pink-700/30 text-pink-200' 
+                        'bg-yellow-700/30 text-yellow-200' %}">
+                {{ e.category.name }}
+              </span>
+            {% else %}
+              <span class="px-3 py-1 text-xs rounded-full bg-gray-600/30 text-gray-300">-</span>
+            {% endif %}
+          </td>
+
+          <td class="text-teal-300 font-semibold">₹{{ e.amount }}</td>
+          <td class="text-gray-400">{{ e.date }}</td>
+
+          <!-- STATUS BADGE -->
+          <td>
+            {% if e.status == "PAID" %}
+              <span class="px-3 py-1 rounded-full bg-teal-700/30 text-teal-200 text-xs">Paid</span>
+            {% else %}
+              <span class="px-3 py-1 rounded-full bg-yellow-700/30 text-yellow-200 text-xs">Pending</span>
+            {% endif %}
+          </td>
+
+          <td class="text-right">
+            <a href="{% url 'expense_view' e.id %}" class="text-gray-300 mr-3">View</a>
+            <a href="{% url 'expense_edit' e.id %}" class="text-teal-300 mr-2">Edit</a>
+            <a href="{% url 'expense_delete' e.id %}" class="text-red-400">Delete</a>
+          </td>
+        </tr>
+
+        {% empty %}
+        <tr>
+          <td colspan="6" class="py-8 text-center text-gray-500">
+            No expenses found.
+          </td>
+        </tr>
+        {% endfor %}
+      </tbody>
+    </table>
+  </div>
+</div>
+
+{% endblock %}

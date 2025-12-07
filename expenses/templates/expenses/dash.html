@@ -1,0 +1,160 @@
+{% extends "expenses/base.html" %}
+{% block title %}Dashboard{% endblock %}
+
+{% block content %}
+
+<style>
+  .card {
+      background: rgba(255,255,255,0.04);
+      border: 1px solid rgba(255,255,255,0.08);
+      border-radius: 14px;
+      padding: 16px;
+  }
+
+  @media (max-width: 768px) {
+      .sidebar {
+          position: fixed;
+          left: -260px;
+          top: 0;
+          height: 100vh;
+          width: 240px;
+          transition: 0.3s ease;
+          z-index: 50;
+      }
+      .sidebar.open {
+          left: 0;
+      }
+      .content-area {
+          padding-left: 0 !important;
+      }
+  }
+</style>
+
+<!-- ======================= TOP SUMMARY CARDS ======================= -->
+<div class="flex gap-4 overflow-x-auto snap-x pb-4 mt-2 px-1">
+
+  <div class="card min-w-[150px] snap-start">
+    <div class="muted text-xs mb-1">Today Spent</div>
+    <div class="text-xl text-white font-bold">₹{{ today_spent|default:"0" }}</div>
+    <p class="text-xs text-gray-400">PAID entries</p>
+  </div>
+
+  <div class="card min-w-[150px] snap-start">
+    <div class="muted text-xs mb-1">This Month</div>
+    <div class="text-xl text-white font-bold">₹{{ month_spent|default:"0" }}</div>
+    <p class="text-xs text-gray-400">Total Expenses</p>
+  </div>
+
+  <div class="card min-w-[150px] snap-start">
+    <div class="muted text-xs mb-1">Remaining Budget</div>
+    <div class="text-xl text-green-400 font-bold">₹{{ remaining_budget|default:"0" }}</div>
+    <p class="text-xs text-gray-400">{{ used_percent|floatformat:0 }}% Used</p>
+  </div>
+
+  <div class="card min-w-[150px] snap-start">
+    <div class="muted text-xs mb-1">Estimated Savings</div>
+    <div class="text-xl text-green-400 font-bold">₹{{ estimated_savings|default:"0" }}</div>
+    <p class="text-xs text-gray-400">Projected</p>
+  </div>
+
+</div>
+
+<!-- ======================= GRID CONTENT ======================= -->
+<div class="grid md:grid-cols-2 gap-4 mt-3">
+
+  <!-- Top Category -->
+  <div class="card">
+    <div class="text-lg text-white font-semibold mb-1">Top Category</div>
+
+    {% if top_categories %}
+      <p class="text-gray-300">{{ top_categories.0.category__name }}</p>
+      <p class="font-bold text-white">₹{{ top_categories.0.total }}</p>
+    {% else %}
+      <p class="text-gray-500 text-sm italic">No spending yet.</p>
+    {% endif %}
+  </div>
+
+  <!-- Goal Tracker -->
+  <div class="card">
+    <div class="text-lg text-white font-semibold mb-1">Goal Tracker</div>
+    {% if goals %}
+      {% for g in goals %}
+        <p class="text-gray-300">{{ g.title }}</p>
+        <p class="text-sm text-gray-400 mb-2">Progress: {{ g.progress }}%</p>
+      {% endfor %}
+    {% else %}
+      <p class="text-gray-500 text-sm italic">No goals set.</p>
+    {% endif %}
+  </div>
+
+  <!-- Notifications -->
+  <div class="card">
+    <div class="text-lg text-white font-semibold mb-1">Notifications</div>
+
+    {% if notifications_unread_count > 0 %}
+      <p class="text-gray-300 text-sm">You have {{ notifications_unread_count }} unread notifications.</p>
+    {% else %}
+      <p class="text-gray-500 text-sm italic">0 unread</p>
+    {% endif %}
+  </div>
+
+  <!-- Category Spending removed (your view does not provide category_summary) -->
+
+  <!-- Budget Progress -->
+  <div class="card">
+    <div class="text-lg text-white font-semibold">Budget Progress</div>
+    <div class="w-full bg-white/10 h-2 rounded mt-2">
+      <div class="bg-green-400 h-2 rounded" style="width: {{ used_percent }}%"></div>
+    </div>
+    <p class="text-xs mt-1 text-gray-400">{{ used_percent|floatformat:0 }}% used</p>
+    <p class="text-xs text-gray-400">Remaining: ₹{{ remaining_budget }}</p>
+  </div>
+
+  <!-- Spending Comparison -->
+  <div class="card">
+    <div class="text-lg text-white font-semibold mb-1">Spending Comparison</div>
+
+    <div class="flex justify-between">
+      <p class="text-gray-300 text-sm">Today</p>
+      <p class="text-white font-semibold">₹{{ today_spent }}</p>
+    </div>
+
+    <div class="flex justify-between">
+      <p class="text-gray-300 text-sm">Yesterday</p>
+      <p class="text-white font-semibold">₹0</p> <!-- backend me yesterday nahi aata -->
+    </div>
+
+    <p class="text-green-400 text-xs mt-1">Good! You spent less today.</p>
+  </div>
+
+  <!-- Highest Expense -->
+  <div class="card">
+    <div class="text-lg text-white font-semibold mb-1">Highest Expense</div>
+    <p class="text-gray-500 text-sm italic">No data (add in view if needed)</p>
+  </div>
+
+</div>
+
+<!-- ======================= RECENT EXPENSES ======================= -->
+<div class="card mt-6">
+  <div class="flex justify-between items-center mb-2">
+    <div class="text-lg font-semibold text-white">Recent Expenses</div>
+    <div class="muted text-sm">Latest Activity</div>
+  </div>
+
+  {% if recent_expenses %}
+    {% for e in recent_expenses %}
+      <div class="flex justify-between border-b border-white/5 py-2">
+        <div>
+          <p class="text-gray-300">{{ e.category }}</p>
+          <p class="text-xs text-gray-500">{{ e.date|date:"M d" }}</p>
+        </div>
+        <p class="text-red-400 font-semibold">₹{{ e.amount }}</p>
+      </div>
+    {% endfor %}
+  {% else %}
+      <p class="text-gray-500 text-sm italic">No recent transactions.</p>
+  {% endif %}
+</div>
+
+{% endblock %}
